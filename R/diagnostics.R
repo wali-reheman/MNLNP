@@ -292,7 +292,7 @@ model_summary_comparison <- function(mnl_fit, mnp_fit = NULL, print_summary = TR
     cat("\n=== Model Summary Comparison ===\n\n")
 
     cat(sprintf("%-15s %10s %10s\n", "Metric", "MNL", "MNP"))
-    cat(strrep("-", 37), "\n")
+    cat(paste(rep("-", 37), collapse = ""), "\n")
     cat(sprintf("%-15s %10s %10s\n", "Converged",
                 ifelse(mnl_summary$converged, "Yes", "No"),
                 ifelse(mnp_summary$converged, "Yes", "No")))
@@ -315,4 +315,203 @@ model_summary_comparison <- function(mnl_fit, mnp_fit = NULL, print_summary = TR
   }
 
   invisible(list(mnl = mnl_summary, mnp = mnp_summary))
+}
+
+
+#' Interpret MNP Convergence Failure
+#'
+#' Diagnoses why MNP failed to converge and provides actionable recommendations.
+#'
+#' @param formula Model formula.
+#' @param data Data frame.
+#' @param error_message Character. The error message from MNP (if available).
+#' @param verbose Logical. Print diagnostic information. Default TRUE.
+#'
+#' @return A list with components:
+#'   \item{likely_causes}{Character vector of probable reasons for failure}
+#'   \item{recommendations}{Character vector of actionable next steps}
+#'   \item{diagnostics}{List of diagnostic values (sample size, correlation estimate, etc.)}
+#'
+#' @details
+#' This function performs several diagnostic checks to identify why MNP failed:
+#' \itemize{
+#'   \item Sample size adequacy (n < 250 is high-risk)
+#'   \item Error correlation structure (low correlation favors MNL)
+#'   \item Multicollinearity issues
+#'   \item Identification problems
+#'   \item Data quality issues
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # After MNP fails
+#' diagnosis <- interpret_convergence_failure(choice ~ x1 + x2, data = mydata)
+#' print(diagnosis$recommendations)
+#' }
+#'
+#' @export
+interpret_convergence_failure <- function(formula, data, error_message = NULL,
+                                           verbose = TRUE) {
+
+  likely_causes <- character()
+  recommendations <- character()
+  diagnostics <- list()
+
+  # Extract response variable
+  response_var <- all.vars(formula)[1]
+  y <- data[[response_var]]
+  if (!is.factor(y)) y <- factor(y)
+
+  # Extract predictors
+  predictor_vars <- all.vars(formula)[-1]
+  X <- data[, predictor_vars, drop = FALSE]
+
+  # Diagnostic 1: Sample size
+  n <- nrow(data)
+  n_alternatives <- length(levels(y))
+  diagnostics$n <- n
+  diagnostics$n_alternatives <- n_alternatives
+  diagnostics$observations_per_alternative <- n / n_alternatives
+
+  if (n < 100) {
+    likely_causes <- c(likely_causes,
+                      "Sample size critically small (n < 100)")
+    recommendations <- c(recommendations,
+                        "- Collect more data (target n >= 250)")
+    recommendations <- c(recommendations,
+                        "- Use MNL instead (MNP convergence rate ~= 2% at n=100)")
+  } else if (n < 250) {
+    likely_causes <- c(likely_causes,
+                      "Sample size small (n < 250)")
+    recommendations <- c(recommendations,
+                        "- Consider using MNL (MNP convergence rate ~= 74% at n=250)")
+    recommendations <- c(recommendations,
+                        "- If MNP required, try n >= 500 (90% convergence rate)")
+  }
+
+  # Diagnostic 2: Check if IIA holds (low correlation favors MNL)
+  # Quick test: fit MNL and check if residuals suggest independence
+  mnl_fit <- tryCatch({
+    if (!requireNamespace("nnet", quietly = TRUE)) {
+      NULL
+    } else {
+      nnet::multinom(formula, data = data, trace = FALSE)
+    }
+  }, error = function(e) NULL)
+
+  if (!is.null(mnl_fit)) {
+    diagnostics$mnl_converged <- TRUE
+
+    # If MNL fits easily but MNP doesn't, suggests IIA holds
+    likely_causes <- c(likely_causes,
+                      "IIA assumption may hold (errors independent)")
+    recommendations <- c(recommendations,
+                        "- MNL is appropriate when IIA holds")
+    recommendations <- c(recommendations,
+                        "- Test IIA with Hausman-McFadden test")
+  }
+
+  # Diagnostic 3: Multicollinearity
+  if (ncol(X) > 1) {
+    correlations <- cor(X, use = "complete.obs")
+    max_cor <- max(abs(correlations[upper.tri(correlations)]))
+    diagnostics$max_predictor_correlation <- max_cor
+
+    if (max_cor > 0.9) {
+      likely_causes <- c(likely_causes,
+                        sprintf("High multicollinearity detected (max r = %.3f)", max_cor))
+      recommendations <- c(recommendations,
+                          "- Remove highly correlated predictors")
+      recommendations <- c(recommendations,
+                          "- Consider PCA or variable selection")
+    }
+  }
+
+  # Diagnostic 4: Separation or perfect prediction
+  # Check if any alternative has very few observations
+  alternative_counts <- table(y)
+  min_count <- min(alternative_counts)
+  diagnostics$min_alternative_count <- min_count
+
+  if (min_count < 10) {
+    likely_causes <- c(likely_causes,
+                      sprintf("Rare alternative (min count = %d)", min_count))
+    recommendations <- c(recommendations,
+                        sprintf("- Collect more observations for rare alternatives"))
+    recommendations <- c(recommendations,
+                        "- Consider collapsing rare categories")
+  }
+
+  # Diagnostic 5: Analyze error message
+  if (!is.null(error_message)) {
+    diagnostics$error_message <- error_message
+
+    if (grepl("TruncNorm.*lower bound > upper bound", error_message)) {
+      likely_causes <- c(likely_causes,
+                        "MCMC sampler encountered invalid truncation bounds")
+      recommendations <- c(recommendations,
+                          "- This often indicates insufficient data")
+      recommendations <- c(recommendations,
+                          "- Try different starting values or priors")
+    }
+
+    if (grepl("optim|convergence", error_message, ignore.case = TRUE)) {
+      likely_causes <- c(likely_causes,
+                        "Optimization failed to converge")
+      recommendations <- c(recommendations,
+                          "- Increase burnin or n.draws in MNP()")
+      recommendations <- c(recommendations,
+                          "- Try different MCMC tuning parameters")
+    }
+  }
+
+  # Diagnostic 6: Data quality
+  missing_predictors <- sum(!complete.cases(X))
+  diagnostics$missing_observations <- missing_predictors
+
+  if (missing_predictors > 0) {
+    likely_causes <- c(likely_causes,
+                      sprintf("Missing data detected (%d observations)", missing_predictors))
+    recommendations <- c(recommendations,
+                        "- Handle missing data (imputation or deletion)")
+  }
+
+  # Overall assessment
+  if (length(likely_causes) == 0) {
+    likely_causes <- c("Unclear - may be MCMC tuning issue")
+    recommendations <- c(recommendations,
+                        "- Try increasing burnin and n.draws")
+    recommendations <- c(recommendations,
+                        "- Use fit_mnp_safe() with smart starting values")
+  }
+
+  # Print if verbose
+  if (verbose) {
+    cat("\n=== MNP Convergence Failure Diagnosis ===\n\n")
+
+    cat("Sample Information:\n")
+    cat(sprintf("  - n = %d observations\n", diagnostics$n))
+    cat(sprintf("  - %d alternatives\n", diagnostics$n_alternatives))
+    cat(sprintf("  - %.1f observations per alternative\n",
+                diagnostics$observations_per_alternative))
+    cat("\n")
+
+    cat("Likely Causes:\n")
+    for (cause in likely_causes) {
+      cat(sprintf("  * %s\n", cause))
+    }
+    cat("\n")
+
+    cat("Recommendations:\n")
+    for (rec in recommendations) {
+      cat(sprintf("  %s\n", rec))
+    }
+    cat("\n")
+  }
+
+  invisible(list(
+    likely_causes = likely_causes,
+    recommendations = recommendations,
+    diagnostics = diagnostics
+  ))
 }
