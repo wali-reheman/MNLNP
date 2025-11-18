@@ -76,6 +76,21 @@ fit_mnp_safe <- function(formula, data, fallback = "MNL", max_attempts = 3,
     }
   }
 
+  # Get smart starting values from MNL (first attempt only)
+  mnl_coefs <- NULL
+  if (requireNamespace("nnet", quietly = TRUE)) {
+    mnl_quick <- tryCatch({
+      nnet::multinom(formula = formula, data = data, trace = FALSE)
+    }, error = function(e) NULL)
+
+    if (!is.null(mnl_quick)) {
+      mnl_coefs <- coef(mnl_quick)
+      if (verbose) {
+        message("Using MNL coefficients as smart starting values for MNP...")
+      }
+    }
+  }
+
   # Try fitting MNP with multiple attempts
   for (attempt in 1:max_attempts) {
     if (verbose && max_attempts > 1) {
@@ -86,8 +101,19 @@ fit_mnp_safe <- function(formula, data, fallback = "MNL", max_attempts = 3,
       # Set different seed for each attempt
       set.seed(12345 + attempt * 100)
 
-      # Call MNP::mnp
-      MNP::mnp(formula = formula, data = data, verbose = FALSE, ...)
+      # Use smart starting values on first attempt, random on subsequent
+      if (attempt == 1 && !is.null(mnl_coefs)) {
+        # Convert MNL coefs to MNP starting value format
+        # MNP expects a matrix for coef.p (coefficients)
+        starting_coefs <- as.matrix(mnl_coefs)
+
+        # Call MNP with starting values
+        MNP::mnp(formula = formula, data = data, verbose = FALSE,
+                coef.p = starting_coefs, ...)
+      } else {
+        # Call MNP::mnp with default starting values
+        MNP::mnp(formula = formula, data = data, verbose = FALSE, ...)
+      }
 
     }, error = function(e) {
       if (verbose && attempt == max_attempts) {

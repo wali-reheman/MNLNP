@@ -14,6 +14,13 @@ export(evaluate_performance)
 # Diagnostics
 export(check_mnp_convergence)
 export(model_summary_comparison)
+export(interpret_convergence_failure)
+
+# Model choice analysis
+export(quantify_model_choice_consequences)
+
+# Simulation tools
+export(run_benchmark_simulation)
 
 # Visualization
 export(plot_convergence_rates)
