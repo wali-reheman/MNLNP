@@ -1,4 +1,4 @@
-# ⚠️ IMPORTANT: This creates ILLUSTRATIVE/PLACEHOLDER data
+# WARNING: IMPORTANT: This creates ILLUSTRATIVE/PLACEHOLDER data
 # These are educated guesses based on literature review, NOT empirical results
 # Run run_benchmark_simulation() to generate real empirical benchmarks
 #
@@ -73,7 +73,7 @@ mnl_mnp_benchmark$data_type <- "illustrative_placeholder"
 
 # Add metadata
 attr(mnl_mnp_benchmark, "warning") <- paste(
-  "⚠️ WARNING: This data is ILLUSTRATIVE ONLY, not empirical.",
+  "WARNING: WARNING: This data is ILLUSTRATIVE ONLY, not empirical.",
   "Values are educated guesses based on literature review.",
   "Run run_benchmark_simulation() to generate real benchmarks."
 )
@@ -93,7 +93,7 @@ if (!dir.exists("data")) dir.create("data")
 save(mnl_mnp_benchmark, file = "data/mnl_mnp_benchmark.rda", compress = "xz")
 
 cat("\n")
-cat("⚠️  WARNING: ILLUSTRATIVE DATA CREATED (NOT EMPIRICAL)\n")
+cat("WARNING:  WARNING: ILLUSTRATIVE DATA CREATED (NOT EMPIRICAL)\n")
 cat(paste(rep("=", 70), collapse = ""), "\n")
 cat("This benchmark data contains PLACEHOLDER estimates, not real simulations.\n")
 cat("Source: Educated guesses based on literature review\n")

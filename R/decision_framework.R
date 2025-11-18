@@ -32,8 +32,8 @@
 #'
 #' **Decision logic:**
 #' - n < 250: Always MNL (MNP won't converge)
-#' - 250 ≤ n < 500: MNL preferred (MNP unreliable)
-#' - n ≥ 500 + high correlation: MNP viable
+#' - 250 <= n < 500: MNL preferred (MNP unreliable)
+#' - n >= 500 + high correlation: MNP viable
 #' - Substitution effects: Usually MNL better
 #' - Computational limits: Always MNL
 #'
@@ -69,7 +69,7 @@ decision_framework <- function(n = NULL,
     cat(paste(rep("=", 70), collapse = ""), "\n\n")
 
     if (!mnp_available) {
-      cat("⚠️  MNP package not installed\n")
+      cat("WARNING:  MNP package not installed\n")
       cat("   Recommendation will be MNL-only\n")
       cat("   Install MNP: install.packages('MNP')\n\n")
     }
@@ -330,7 +330,7 @@ decision_framework <- function(n = NULL,
     if (length(caveats) > 0) {
       cat("IMPORTANT CAVEATS:\n")
       for (cav in caveats) {
-        cat(sprintf("  • %s\n", cav))
+        cat(sprintf("  * %s\n", cav))
       }
       cat("\n")
     }
@@ -338,7 +338,7 @@ decision_framework <- function(n = NULL,
     if (length(alternative_options) > 0) {
       cat("ALTERNATIVE OPTIONS:\n")
       for (alt in alternative_options) {
-        cat(sprintf("  • %s\n", alt))
+        cat(sprintf("  * %s\n", alt))
       }
       cat("\n")
     }

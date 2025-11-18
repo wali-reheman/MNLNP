@@ -34,10 +34,10 @@
 #'
 #' **Example interpretation:**
 #' If Perot drops out:
-#' - TRUE (from simulation): 51% → Clinton, 49% → Bush
-#' - MNL predicts: 52% → Clinton, 48% → Bush (error = 1%)
-#' - MNP predicts: 98% → Clinton, 2% → Bush (error = 47%)
-#' → MNL is more accurate for this substitution effect
+#' - TRUE (from simulation): 51% -> Clinton, 49% -> Bush
+#' - MNL predicts: 52% -> Clinton, 48% -> Bush (error = 1%)
+#' - MNP predicts: 98% -> Clinton, 2% -> Bush (error = 47%)
+#' -> MNL is more accurate for this substitution effect
 #'
 #' @examples
 #' \dontrun{
@@ -297,7 +297,7 @@ simulate_dropout_scenario <- function(formula, data, drop_alternative,
       cat(sprintf("  MNP: %.1f%%\n", 100 * mnp_error))
     }
 
-    cat(sprintf("\n✓ Winner: %s\n", winner))
+    cat(sprintf("\n[OK] Winner: %s\n", winner))
     cat(paste(rep("=", 70), collapse = ""), "\n\n")
   }
 

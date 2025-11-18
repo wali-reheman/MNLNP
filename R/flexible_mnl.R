@@ -335,7 +335,7 @@ flexible_mnl <- function(formula, data,
     print(comparison_df, row.names = FALSE, digits = 4)
 
     cat("\n")
-    cat(sprintf("✓ Best specification: %s\n", best_form))
+    cat(sprintf("[OK] Best specification: %s\n", best_form))
     cat(sprintf("  %s\n", recommendation))
     cat(paste(rep("=", 70), collapse = ""), "\n\n")
 

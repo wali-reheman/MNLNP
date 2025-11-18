@@ -203,10 +203,10 @@ recommend_model <- function(n, correlation = NULL, functional_form = "linear", v
 #' @details
 #' Based on empirical convergence rates:
 #' \itemize{
-#'   \item n=100 → 2% convergence
-#'   \item n=250 → 74% convergence
-#'   \item n=500 → ~90% convergence
-#'   \item n=1000 → ~95% convergence
+#'   \item n=100 -> 2% convergence
+#'   \item n=250 -> 74% convergence
+#'   \item n=500 -> ~90% convergence
+#'   \item n=1000 -> ~95% convergence
 #' }
 #'
 #' MNL always converges, so this function mainly applies to MNP.
@@ -274,7 +274,7 @@ required_sample_size <- function(model = "MNP", target_convergence = 0.90, corre
 
   cat("\n")
   cat(sprintf("For %s with %.0f%% convergence probability:\n", model, target_convergence * 100))
-  cat(sprintf("Minimum sample size: n ≥ %d\n", minimum_n))
+  cat(sprintf("Minimum sample size: n >= %d\n", minimum_n))
   if (!is.null(warning_msg)) {
     cat(sprintf("\n%s\n", warning_msg))
   }

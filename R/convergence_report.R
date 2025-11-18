@@ -29,7 +29,7 @@
 #'   \item **Effective sample size**: How many independent draws (target: >1000)
 #'   \item **Autocorrelation**: Correlation between successive draws
 #'   \item **Trace plots**: Visual assessment of mixing
-#'   \item **Boundary warnings**: Correlation parameters near ±1
+#'   \item **Boundary warnings**: Correlation parameters near +/-1
 #' }
 #'
 #' **Convergence criteria:**
@@ -143,9 +143,9 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
 
     failed <- sum(!geweke_results$Converged, na.rm = TRUE)
     if (failed > 0) {
-      cat(sprintf("⚠️  %d parameters failed Geweke test\n", failed))
+      cat(sprintf("WARNING:  %d parameters failed Geweke test\n", failed))
     } else {
-      cat("✓ All parameters passed Geweke test\n")
+      cat("[OK] All parameters passed Geweke test\n")
     }
     cat("\n")
   }
@@ -165,7 +165,7 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
         acf_vals <- acf(draws, lag.max = 50, plot = FALSE)$acf
 
         # Effective sample size (simple formula)
-        # ESS ≈ n / (1 + 2 * sum(autocorrelations))
+        # ESS ~= n / (1 + 2 * sum(autocorrelations))
         rho_sum <- sum(acf_vals[2:min(50, length(acf_vals))])
         ess_vals[j] <- length(draws) / (1 + 2 * rho_sum)
       }
@@ -190,9 +190,9 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
 
     inadequate <- sum(!ess_results$Adequate, na.rm = TRUE)
     if (inadequate > 0) {
-      cat(sprintf("⚠️  %d parameters have ESS < 1000\n", inadequate))
+      cat(sprintf("WARNING:  %d parameters have ESS < 1000\n", inadequate))
     } else {
-      cat("✓ All parameters have adequate ESS\n")
+      cat("[OK] All parameters have adequate ESS\n")
     }
     cat("\n")
   }
@@ -231,9 +231,9 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
 
     high_acf <- sum(acf_results$High_Autocorr, na.rm = TRUE)
     if (high_acf > 0) {
-      cat(sprintf("⚠️  %d parameters have high autocorrelation\n", high_acf))
+      cat(sprintf("WARNING:  %d parameters have high autocorrelation\n", high_acf))
     } else {
-      cat("✓ Autocorrelation is acceptable\n")
+      cat("[OK] Autocorrelation is acceptable\n")
     }
     cat("\n")
   }
@@ -251,7 +251,7 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
     D <- diag(1 / sqrt(diag(Sigma)))
     Rho <- D %*% Sigma %*% D
 
-    # Check for values near ±1
+    # Check for values near +/-1
     off_diag <- Rho[lower.tri(Rho)]
 
     if (any(abs(off_diag) > 0.95)) {
@@ -269,10 +269,10 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
     cat("\n--- Boundary Warnings ---\n")
     if (length(corr_warnings) > 0) {
       for (warn in corr_warnings) {
-        cat(sprintf("⚠️  %s\n", warn))
+        cat(sprintf("WARNING:  %s\n", warn))
       }
     } else {
-      cat("✓ No boundary issues detected\n")
+      cat("[OK] No boundary issues detected\n")
     }
     cat("\n")
   }
@@ -309,10 +309,10 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
 
   # Recommendation
   if (overall_converged) {
-    recommendation <- "✓ MNP appears to have converged. Results are reliable."
+    recommendation <- "[OK] MNP appears to have converged. Results are reliable."
   } else {
     recommendation <- paste(
-      "⚠️  MNP convergence issues detected:",
+      "WARNING:  MNP convergence issues detected:",
       paste("  -", issues, collapse = "\n"),
       "\nRecommendations:",
       "  1. Increase n.draws (try 10,000 or more)",
@@ -330,12 +330,12 @@ convergence_report <- function(mnp_fit, n_draws = NULL,
     cat(paste(rep("=", 70), collapse = ""), "\n\n")
 
     if (overall_converged) {
-      cat("Status: CONVERGED ✓\n\n")
+      cat("Status: CONVERGED [OK]\n\n")
     } else {
-      cat("Status: ISSUES DETECTED ⚠️\n\n")
+      cat("Status: ISSUES DETECTED WARNING:\n\n")
       cat("Problems found:\n")
       for (issue in issues) {
-        cat(sprintf("  • %s\n", issue))
+        cat(sprintf("  * %s\n", issue))
       }
       cat("\n")
     }

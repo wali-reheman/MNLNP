@@ -96,7 +96,7 @@ functional_form_test <- function(formula, data,
     print(ranked_results, row.names = FALSE, digits = 4)
 
     cat("\n")
-    cat(sprintf("✓ Best form: %s\n", result$best_form))
+    cat(sprintf("[OK] Best form: %s\n", result$best_form))
 
     if (!is.na(improvement) && improvement > 0) {
       cat(sprintf("  %.1f%% improvement over linear baseline\n", improvement))

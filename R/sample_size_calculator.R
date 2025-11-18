@@ -106,7 +106,7 @@ sample_size_calculator <- function(desired_estimand = "probabilities",
     } else {
       # Use empirical convergence rates
       # Based on paper's findings:
-      # n=100 → 2%, n=250 → 74%, n=500 → 90%, n=1000 → 95%
+      # n=100 -> 2%, n=250 -> 74%, n=500 -> 90%, n=1000 -> 95%
 
       if (target_accuracy <= 0.02) {
         recommended_n <- 100
@@ -125,7 +125,7 @@ sample_size_calculator <- function(desired_estimand = "probabilities",
       conservative_n <- round(recommended_n * 1.2)
 
       rationale <- sprintf(
-        "For %d%% MNP convergence probability, need n ≥ %d based on empirical rates",
+        "For %d%% MNP convergence probability, need n >= %d based on empirical rates",
         round(100 * target_accuracy), recommended_n
       )
 
@@ -137,11 +137,11 @@ sample_size_calculator <- function(desired_estimand = "probabilities",
   else if (desired_estimand == "probabilities") {
     if (is.null(target_accuracy)) target_accuracy <- 0.05  # Target RMSE
 
-    # Empirical relationship: RMSE ≈ 0.15 / sqrt(n) for MNL
+    # Empirical relationship: RMSE ~= 0.15 / sqrt(n) for MNL
     # MNP has higher RMSE at small n due to finite-sample bias
 
     if (model == "MNL") {
-      # RMSE ≈ c / sqrt(n), solve for n
+      # RMSE ~= c / sqrt(n), solve for n
       c <- 0.15 * sqrt(n_alternatives / 3)  # Adjust for # alternatives
       recommended_n <- ceiling((c / target_accuracy)^2)
     } else {
@@ -157,7 +157,7 @@ sample_size_calculator <- function(desired_estimand = "probabilities",
     expected_rmse <- c / sqrt(recommended_n)
 
     rationale <- sprintf(
-      "For target RMSE < %.3f, need n ≥ %d (%s model with %d alternatives)",
+      "For target RMSE < %.3f, need n >= %d (%s model with %d alternatives)",
       target_accuracy, recommended_n, model, n_alternatives
     )
 
@@ -176,7 +176,7 @@ sample_size_calculator <- function(desired_estimand = "probabilities",
     z_beta <- qnorm(power)
 
     # Simplified power formula for logistic regression
-    # n ≈ (z_alpha + z_beta)^2 / (effect_size^2 * variance_inflation)
+    # n ~= (z_alpha + z_beta)^2 / (effect_size^2 * variance_inflation)
 
     if (is.null(n_predictors)) n_predictors <- 3
 
@@ -190,7 +190,7 @@ sample_size_calculator <- function(desired_estimand = "probabilities",
     conservative_n <- round(recommended_n * 1.25)
 
     rationale <- sprintf(
-      "For %d%% power to detect effect size %.2f with %d alternatives and %d predictors, need n ≥ %d",
+      "For %d%% power to detect effect size %.2f with %d alternatives and %d predictors, need n >= %d",
       round(100 * power), effect_size, n_alternatives, n_predictors, recommended_n
     )
 
@@ -218,7 +218,7 @@ sample_size_calculator <- function(desired_estimand = "probabilities",
     conservative_n <- round(recommended_n * 1.3)
 
     rationale <- sprintf(
-      "For substitution effects with <%d%% error, need n ≥ %d (%s model)",
+      "For substitution effects with <%d%% error, need n >= %d (%s model)",
       round(100 * target_accuracy), recommended_n, model
     )
 

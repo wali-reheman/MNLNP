@@ -136,9 +136,9 @@ plot_comparison <- function(comparison_results, metric = NULL, ...) {
   # Add winner indicators
   for (i in 1:length(metrics)) {
     if (winners[i] == "MNL") {
-      text(bp[1, i], mnl_vals[i], "★", pos = 3, col = "darkblue", cex = 1.5)
+      text(bp[1, i], mnl_vals[i], "*", pos = 3, col = "darkblue", cex = 2)
     } else {
-      text(bp[2, i], mnp_vals[i], "★", pos = 3, col = "darkred", cex = 1.5)
+      text(bp[2, i], mnp_vals[i], "*", pos = 3, col = "darkred", cex = 2)
     }
   }
 

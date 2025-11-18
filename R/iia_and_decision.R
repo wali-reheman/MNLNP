@@ -24,8 +24,8 @@
 #'
 #' **Interpretation:**
 #' \itemize{
-#'   \item p > 0.05: IIA likely holds → Use MNL (simpler, more efficient)
-#'   \item p < 0.05: IIA violated → Consider MNP or mixed logit
+#'   \item p > 0.05: IIA likely holds -> Use MNL (simpler, more efficient)
+#'   \item p < 0.05: IIA violated -> Consider MNP or mixed logit
 #' }
 #'
 #' **Important:**  This test requires sufficient observations of each alternative.
@@ -197,17 +197,17 @@ test_iia <- function(formula_obj, data_obj, method = "hausman",
     cat(paste(rep("=", 60), collapse = ""), "\n\n")
 
     if (p_value < alpha) {
-      cat("⚠️  IIA appears violated. This suggests:\n")
-      cat("  • Error terms may be correlated across alternatives\n")
-      cat("  • MNL may produce biased estimates\n")
-      cat("  • Consider MNP (if n >= 500) or mixed logit\n")
+      cat("WARNING:  IIA appears violated. This suggests:\n")
+      cat("  * Error terms may be correlated across alternatives\n")
+      cat("  * MNL may produce biased estimates\n")
+      cat("  * Consider MNP (if n >= 500) or mixed logit\n")
       if (!mnp_available) {
         cat("\n  *** Note: MNP package not installed ***\n")
         cat("  Install with: install.packages('MNP')\n")
       }
       cat("\n")
     } else {
-      cat("✓ IIA holds. MNL is appropriate for this data.\n\n")
+      cat("[OK] IIA holds. MNL is appropriate for this data.\n\n")
     }
   }
 
@@ -257,15 +257,15 @@ test_iia <- function(formula_obj, data_obj, method = "hausman",
 #' @examples
 #' # Small sample
 #' quick_decision(n = 150, n_predictors = 3)
-#' # → Recommends MNL
+#' # -> Recommends MNL
 #'
 #' # Large sample with known correlation
 #' quick_decision(n = 800, n_predictors = 5, has_correlation = "yes")
-#' # → Recommends MNP
+#' # -> Recommends MNP
 #'
 #' # Computational constraints
 #' quick_decision(n = 1000, n_predictors = 10, computational_constraint = TRUE)
-#' # → Recommends MNL (MNP too slow)
+#' # -> Recommends MNL (MNP too slow)
 #'
 #' @export
 quick_decision <- function(n, n_predictors, n_alternatives = 3,
@@ -302,9 +302,9 @@ quick_decision <- function(n, n_predictors, n_alternatives = 3,
       cat(sprintf("      Alternatives: %d\n", n_alternatives))
       cat(sprintf("      Correlation: %s\n", has_correlation))
       cat(sprintf("      Computational constraint: %s\n\n", computational_constraint))
-      cat(sprintf("    → RECOMMENDATION: %s\n", result$model))
-      cat(sprintf("    → REASON: %s\n", result$reason))
-      cat(sprintf("    → CONFIDENCE: %s\n\n", result$confidence))
+      cat(sprintf("    -> RECOMMENDATION: %s\n", result$model))
+      cat(sprintf("    -> REASON: %s\n", result$reason))
+      cat(sprintf("    -> CONFIDENCE: %s\n\n", result$confidence))
       cat(paste(rep("=", 60), collapse = ""), "\n\n")
     }
 
@@ -331,8 +331,8 @@ quick_decision <- function(n, n_predictors, n_alternatives = 3,
     )
     if (verbose) {
       cat(paste(rep("=", 60), collapse = ""), "\n\n")
-      cat(sprintf("    → RECOMMENDATION: %s\n", result$model))
-      cat(sprintf("    → REASON: %s\n", result$reason))
+      cat(sprintf("    -> RECOMMENDATION: %s\n", result$model))
+      cat(sprintf("    -> REASON: %s\n", result$reason))
       cat(paste(rep("=", 60), collapse = ""), "\n\n")
     }
     return(result)

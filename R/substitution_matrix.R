@@ -35,7 +35,7 @@
 #' **Methods:**
 #' \itemize{
 #'   \item **simulation**: Uses large-sample simulation to estimate true flows
-#'   \item **analytical**: Uses IIA assumption (P(j|i drops) ∝ P(j))
+#'   \item **analytical**: Uses IIA assumption (P(j|i drops) proportional to P(j))
 #' }
 #'
 #' @examples
@@ -241,8 +241,8 @@ substitution_matrix <- function(model_fit, data,
     summary_text <- c(
       summary_text,
       sprintf("When %s drops out:", from_alternative),
-      sprintf("  → %.1f%% flows to %s", main_flow$Percentage[1], main_flow$To[1]),
-      sprintf("  → %.1f%% flows to %s", main_flow$Percentage[2], main_flow$To[2])
+      sprintf("  -> %.1f%% flows to %s", main_flow$Percentage[1], main_flow$To[1]),
+      sprintf("  -> %.1f%% flows to %s", main_flow$Percentage[2], main_flow$To[2])
     )
   } else {
     # Find most asymmetric flows
@@ -262,7 +262,7 @@ substitution_matrix <- function(model_fit, data,
     summary_text <- c(
       summary_text,
       "Key patterns:",
-      sprintf("  Most asymmetric flow: %s → %s (%.1f%%) vs %s → %s",
+      sprintf("  Most asymmetric flow: %s -> %s (%.1f%%) vs %s -> %s",
               most_asym$From, most_asym$To, most_asym$Percentage,
               most_asym$To, most_asym$From)
     )

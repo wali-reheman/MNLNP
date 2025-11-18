@@ -379,12 +379,12 @@ interpret_convergence_failure <- function(formula, data, error_message = NULL,
     recommendations <- c(recommendations,
                         "- Collect more data (target n >= 250)")
     recommendations <- c(recommendations,
-                        "- Use MNL instead (MNP convergence rate ≈ 2% at n=100)")
+                        "- Use MNL instead (MNP convergence rate ~= 2% at n=100)")
   } else if (n < 250) {
     likely_causes <- c(likely_causes,
                       "Sample size small (n < 250)")
     recommendations <- c(recommendations,
-                        "- Consider using MNL (MNP convergence rate ≈ 74% at n=250)")
+                        "- Consider using MNL (MNP convergence rate ~= 74% at n=250)")
     recommendations <- c(recommendations,
                         "- If MNP required, try n >= 500 (90% convergence rate)")
   }
@@ -498,7 +498,7 @@ interpret_convergence_failure <- function(formula, data, error_message = NULL,
 
     cat("Likely Causes:\n")
     for (cause in likely_causes) {
-      cat(sprintf("  • %s\n", cause))
+      cat(sprintf("  * %s\n", cause))
     }
     cat("\n")
 

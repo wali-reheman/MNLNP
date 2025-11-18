@@ -36,12 +36,12 @@
 #' benchmark data with real empirical results.
 #'
 #' **Recommended Full Study:**
-#' - 6 sample sizes × 5 correlations × 3 effect sizes × 2 forms × 500 reps = 45,000 simulations
+#' - 6 sample sizes x 5 correlations x 3 effect sizes x 2 forms x 500 reps = 45,000 simulations
 #' - Estimated time: 12-24 hours with parallel processing
 #' - Disk space: ~50-100 MB for results
 #'
 #' **Quick Pilot Study:**
-#' - 3 sample sizes × 3 correlations × 2 effect sizes × 1 form × 100 reps = 1,800 simulations
+#' - 3 sample sizes x 3 correlations x 2 effect sizes x 1 form x 100 reps = 1,800 simulations
 #' - Estimated time: 1-2 hours
 #'
 #' @examples

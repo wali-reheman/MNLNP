@@ -32,9 +32,9 @@
 #' }
 #'
 #' This decomposition helps diagnose model problems:
-#' - High calibration → probabilities systematically wrong
-#' - Low refinement → model can't distinguish cases
-#' - High uncertainty → inherently noisy data
+#' - High calibration -> probabilities systematically wrong
+#' - Low refinement -> model can't distinguish cases
+#' - High uncertainty -> inherently noisy data
 #'
 #' @examples
 #' \dontrun{
@@ -159,19 +159,19 @@ brier_score <- function(predicted_probs, actual_choices,
       cat("Interpretation:\n")
 
       if (calibration > 0.1) {
-        cat("  ⚠️  High calibration error - probabilities systematically wrong\n")
+        cat("  WARNING:  High calibration error - probabilities systematically wrong\n")
       } else {
-        cat("  ✓ Good calibration - probabilities are well-calibrated\n")
+        cat("  [OK] Good calibration - probabilities are well-calibrated\n")
       }
 
       if (refinement < 0.05) {
-        cat("  ⚠️  Low refinement - model struggles to distinguish cases\n")
+        cat("  WARNING:  Low refinement - model struggles to distinguish cases\n")
       } else {
-        cat("  ✓ Good refinement - model discriminates well\n")
+        cat("  [OK] Good refinement - model discriminates well\n")
       }
 
       if (uncertainty > 0.2) {
-        cat("  • High uncertainty - data is inherently noisy\n")
+        cat("  * High uncertainty - data is inherently noisy\n")
       }
 
       cat("\n")
@@ -212,7 +212,7 @@ brier_score <- function(predicted_probs, actual_choices,
   } else if (brier < 0.3) {
     interpretation <- c(interpretation, "Moderate prediction accuracy (BS < 0.3)")
   } else {
-    interpretation <- c(interpretation, "Poor prediction accuracy (BS ≥ 0.3)")
+    interpretation <- c(interpretation, "Poor prediction accuracy (BS >= 0.3)")
   }
 
   if (decompose) {
@@ -239,7 +239,7 @@ brier_score <- function(predicted_probs, actual_choices,
     cat(paste(rep("=", 70), collapse = ""), "\n")
     cat("SUMMARY:\n")
     for (line in interpretation) {
-      cat(sprintf("  • %s\n", line))
+      cat(sprintf("  * %s\n", line))
     }
     cat(paste(rep("=", 70), collapse = ""), "\n\n")
   }

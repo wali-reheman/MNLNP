@@ -238,30 +238,30 @@ quantify_model_choice_consequences <- function(n, n_alternatives = 3,
     if (!is.na(bias_ratio)) {
       cat(sprintf("Bias Ratio (MNP/MNL): %.3f\n", bias_ratio))
       if (bias_ratio < 0.9) {
-        cat("  → MNP has lower bias\n")
+        cat("  -> MNP has lower bias\n")
       } else if (bias_ratio > 1.1) {
-        cat("  → MNL has lower bias\n")
+        cat("  -> MNL has lower bias\n")
       } else {
-        cat("  → Similar bias\n")
+        cat("  -> Similar bias\n")
       }
     }
 
     if (!is.na(rmse_ratio)) {
       cat(sprintf("RMSE Ratio (MNP/MNL): %.3f\n", rmse_ratio))
       if (rmse_ratio < 0.9) {
-        cat("  → MNP has better predictions\n")
+        cat("  -> MNP has better predictions\n")
       } else if (rmse_ratio > 1.1) {
-        cat("  → MNL has better predictions\n")
+        cat("  -> MNL has better predictions\n")
       } else {
-        cat("  → Similar prediction accuracy\n")
+        cat("  -> Similar prediction accuracy\n")
       }
     }
 
     cat("\n")
     if (safe_zone) {
-      cat("✓ SAFE ZONE: Model choice doesn't matter much\n")
+      cat("[OK] SAFE ZONE: Model choice doesn't matter much\n")
     } else {
-      cat("⚠ Model choice matters - see recommendation\n")
+      cat("WARNING: Model choice matters - see recommendation\n")
     }
 
     cat(sprintf("\nRecommendation: %s\n", recommendation))
