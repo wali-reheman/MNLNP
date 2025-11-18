@@ -1,26 +1,29 @@
 \name{plot_convergence_rates}
 \alias{plot_convergence_rates}
-\title{Plot convergence rates}
+\title{Plot MNP Convergence Rates by Sample Size}
 \description{
-Function from mnlChoice package. See source code in R/plot_convergence_rates.R for detailed documentation.
+Creates a visualization showing how MNP convergence rates vary with sample size.
 }
 \usage{
-plot_convergence_rates(...)
+plot_convergence_rates(sample_sizes = NULL, correlation = 0, add_benchmark = TRUE, ...)
 }
 \arguments{
-\item{...}{Function arguments. See source file for parameter descriptions.}
+\item{sample_sizes}{Vector of sample sizes to plot. If NULL, uses benchmark data.}
+\item{correlation}{Numeric. Correlation level to plot (if using simulated data).}
+\item{add_benchmark}{Logical. Add empirical benchmark points. Default TRUE.}
+\item{...}{Additional arguments passed to plot().}
 }
 \value{
-Function return value. See source file for details.
-}
-\details{
-This function is part of the mnlChoice package for comparing MNL and MNP models.
-Full documentation is available in the R source file and package vignette.
+A plot showing convergence rates.
+
 }
 \examples{
-# See package vignette for examples
 \dontrun{
+# Plot convergence rates
 plot_convergence_rates()
-}
+
+# Plot for specific sample sizes
+plot_convergence_rates(sample_sizes = c(50, 100, 250, 500, 1000))
 }
 
+}

@@ -1,26 +1,18 @@
 \name{model_summary_comparison}
 \alias{model_summary_comparison}
-\title{Model summary comparison}
+\title{Model Summary Comparison}
 \description{
-Function from mnlChoice package. See source code in R/model_summary_comparison.R for detailed documentation.
+Provides a side-by-side summary of MNL and MNP model fits.
 }
 \usage{
-model_summary_comparison(...)
+model_summary_comparison(mnl_fit, mnp_fit = NULL, print_summary = TRUE)
 }
 \arguments{
-\item{...}{Function arguments. See source file for parameter descriptions.}
+\item{mnl_fit}{Fitted MNL model.}
+\item{mnp_fit}{Fitted MNP model (can be NULL if failed).}
+\item{print_summary}{Logical. Print summary. Default TRUE.}
 }
 \value{
-Function return value. See source file for details.
-}
-\details{
-This function is part of the mnlChoice package for comparing MNL and MNP models.
-Full documentation is available in the R source file and package vignette.
-}
-\examples{
-# See package vignette for examples
-\dontrun{
-model_summary_comparison()
-}
-}
+A list with summary statistics for both models.
 
+}

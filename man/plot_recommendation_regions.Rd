@@ -1,26 +1,24 @@
 \name{plot_recommendation_regions}
 \alias{plot_recommendation_regions}
-\title{Plot recommendation regions}
+\title{Plot Recommendation Regions}
 \description{
-Function from mnlChoice package. See source code in R/plot_recommendation_regions.R for detailed documentation.
+Creates a 2D plot showing recommended model by sample size and correlation.
 }
 \usage{
-plot_recommendation_regions(...)
+plot_recommendation_regions(n_range = c(50, 1000), correlation_range = c(0, 0.8), ...)
 }
 \arguments{
-\item{...}{Function arguments. See source file for parameter descriptions.}
+\item{n_range}{Range of sample sizes to plot. Default c(50, 1000).}
+\item{correlation_range}{Range of correlations. Default c(0, 0.8).}
+\item{...}{Additional plotting arguments.}
 }
 \value{
-Function return value. See source file for details.
-}
-\details{
-This function is part of the mnlChoice package for comparing MNL and MNP models.
-Full documentation is available in the R source file and package vignette.
+A heatmap showing recommendation regions.
+
 }
 \examples{
-# See package vignette for examples
 \dontrun{
 plot_recommendation_regions()
 }
-}
 
+}

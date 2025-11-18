@@ -1,26 +1,27 @@
 \name{plot_comparison}
 \alias{plot_comparison}
-\title{Plot comparison}
+\title{Plot Model Comparison Results}
 \description{
-Function from mnlChoice package. See source code in R/plot_comparison.R for detailed documentation.
+Visualizes the results of MNL vs MNP comparison.
 }
 \usage{
-plot_comparison(...)
+plot_comparison(comparison_results, metric = NULL, ...)
 }
 \arguments{
-\item{...}{Function arguments. See source file for parameter descriptions.}
+\item{comparison_results}{Results from compare_mnl_mnp().}
+\item{metric}{Character. Which metric to focus on: "RMSE", "Brier", "AIC", etc.}
+\item{...}{Additional arguments passed to barplot().}
 }
 \value{
-Function return value. See source file for details.
-}
-\details{
-This function is part of the mnlChoice package for comparing MNL and MNP models.
-Full documentation is available in the R source file and package vignette.
+A comparison plot.
+
 }
 \examples{
-# See package vignette for examples
 \dontrun{
-plot_comparison()
-}
+# Simulate data and compare models
+dat <- generate_choice_data(n = 250, seed = 123)
+comp <- compare_mnl_mnp(choice ~ x1 + x2, data = dat$data)
+plot_comparison(comp)
 }
 
+}
