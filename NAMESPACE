@@ -18,6 +18,11 @@ export(interpret_convergence_failure)
 
 # Model choice analysis
 export(quantify_model_choice_consequences)
+export(test_iia)
+export(quick_decision)
+
+# Publication tools
+export(publication_table)
 
 # Simulation tools
 export(run_benchmark_simulation)

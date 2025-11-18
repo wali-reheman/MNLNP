@@ -292,7 +292,7 @@ model_summary_comparison <- function(mnl_fit, mnp_fit = NULL, print_summary = TR
     cat("\n=== Model Summary Comparison ===\n\n")
 
     cat(sprintf("%-15s %10s %10s\n", "Metric", "MNL", "MNP"))
-    cat(strrep("-", 37), "\n")
+    cat(paste(rep("-", 37), collapse = ""), "\n")
     cat(sprintf("%-15s %10s %10s\n", "Converged",
                 ifelse(mnl_summary$converged, "Yes", "No"),
                 ifelse(mnp_summary$converged, "Yes", "No")))

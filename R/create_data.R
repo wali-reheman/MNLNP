@@ -1,5 +1,9 @@
-# Temporary script to create benchmark data
-# Run this to generate the .rda file
+# ⚠️ IMPORTANT: This creates ILLUSTRATIVE/PLACEHOLDER data
+# These are educated guesses based on literature review, NOT empirical results
+# Run run_benchmark_simulation() to generate real empirical benchmarks
+#
+# WARNING: Do NOT use these values for publication without validation
+# They serve as reasonable starting points pending full simulation study
 
 # Simulation conditions
 sample_sizes <- c(50, 100, 250, 500, 1000)
@@ -16,7 +20,8 @@ conditions <- expand.grid(
 
 mnl_mnp_benchmark <- conditions
 
-# MNP convergence rates (increases with n)
+# ILLUSTRATIVE MNP convergence rates (based on literature, not simulations)
+# Source: Educated estimates from anecdotal experience
 mnl_mnp_benchmark$mnp_convergence_rate <- with(mnl_mnp_benchmark, {
   rate <- numeric(nrow(mnl_mnp_benchmark))
   rate[sample_size == 50] <- 0.00
@@ -27,7 +32,7 @@ mnl_mnp_benchmark$mnp_convergence_rate <- with(mnl_mnp_benchmark, {
   rate
 })
 
-# MNL win rate
+# ILLUSTRATIVE MNL win rate (placeholder estimates)
 mnl_mnp_benchmark$mnl_win_rate <- with(mnl_mnp_benchmark, {
   base_rate <- numeric(nrow(mnl_mnp_benchmark))
   base_rate[sample_size == 50] <- 1.00
@@ -39,7 +44,7 @@ mnl_mnp_benchmark$mnl_win_rate <- with(mnl_mnp_benchmark, {
   pmax(0.30, pmin(1.00, adjusted))
 })
 
-# RMSE values
+# ILLUSTRATIVE RMSE values (simulated, not from actual model comparisons)
 set.seed(12345)
 mnl_mnp_benchmark$mnl_rmse_mean <- with(mnl_mnp_benchmark, {
   base <- 0.08 * sqrt(100 / sample_size)
@@ -62,7 +67,18 @@ mnl_mnp_benchmark$mnp_brier_mean <- with(mnl_mnp_benchmark, {
   mnp_rmse_mean^2 * 0.5
 })
 
-mnl_mnp_benchmark$n_replications <- 1000
+# Mark as illustrative, not empirical
+mnl_mnp_benchmark$n_replications <- 0  # ZERO = not real simulations
+mnl_mnp_benchmark$data_type <- "illustrative_placeholder"
+
+# Add metadata
+attr(mnl_mnp_benchmark, "warning") <- paste(
+  "⚠️ WARNING: This data is ILLUSTRATIVE ONLY, not empirical.",
+  "Values are educated guesses based on literature review.",
+  "Run run_benchmark_simulation() to generate real benchmarks."
+)
+attr(mnl_mnp_benchmark, "created") <- Sys.time()
+attr(mnl_mnp_benchmark, "source") <- "Placeholder estimates pending full study"
 
 # Round
 mnl_mnp_benchmark$mnp_convergence_rate <- round(mnl_mnp_benchmark$mnp_convergence_rate, 3)
@@ -76,5 +92,15 @@ mnl_mnp_benchmark$mnp_brier_mean <- round(mnl_mnp_benchmark$mnp_brier_mean, 5)
 if (!dir.exists("data")) dir.create("data")
 save(mnl_mnp_benchmark, file = "data/mnl_mnp_benchmark.rda", compress = "xz")
 
-cat("Benchmark data created successfully!\n")
+cat("\n")
+cat("⚠️  WARNING: ILLUSTRATIVE DATA CREATED (NOT EMPIRICAL)\n")
+cat(paste(rep("=", 70), collapse = ""), "\n")
+cat("This benchmark data contains PLACEHOLDER estimates, not real simulations.\n")
+cat("Source: Educated guesses based on literature review\n")
+cat("n_replications = 0 (indicates no actual Monte Carlo runs)\n")
+cat("\nTo generate REAL empirical benchmarks, run:\n")
+cat("  source('R/run_benchmark_simulation.R')\n")
+cat("  pilot <- run_benchmark_simulation(n_reps = 100)\n")
+cat(paste(rep("=", 70), collapse = ""), "\n\n")
 print(head(mnl_mnp_benchmark, 10))
+

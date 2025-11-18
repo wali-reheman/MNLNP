@@ -265,7 +265,7 @@ compare_mnl_mnp_cv <- function(formula, data, metrics = c("RMSE", "Brier", "Accu
   # Print results
   if (verbose) {
     cat("\nModel Comparison Results:\n")
-    cat(strrep("-", 50), "\n")
+    cat(paste(rep("-", 50), collapse = ""), "\n")
     print(results, row.names = FALSE)
     cat("\n")
     cat(sprintf("Recommendation: %s\n\n", recommendation))
