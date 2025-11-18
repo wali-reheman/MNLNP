@@ -95,14 +95,14 @@ recommend_model <- function(n, correlation = NULL, functional_form = "linear", v
     recommendation <- "MNL"
     confidence <- "High"
     reason <- sprintf(
-      "At n=%d, MNP converges only %.0f%% of the time. MNL is far more reliable.",
+      "At n=%.0f, MNP converges only %.0f%% of the time. MNL is far more reliable.",
       n, mnp_convergence * 100
     )
   } else if (n < 250) {
     recommendation <- "MNL"
     confidence <- "High"
     reason <- sprintf(
-      "At n=%d, MNP converges %.0f%% of the time but MNL still wins %.0f%% on RMSE. MNL is more reliable and often more accurate.",
+      "At n=%.0f, MNP converges %.0f%% of the time but MNL still wins %.0f%% on RMSE. MNL is more reliable and often more accurate.",
       n, mnp_convergence * 100, mnl_win_rate * 100
     )
   } else if (n < 500) {
@@ -110,14 +110,14 @@ recommend_model <- function(n, correlation = NULL, functional_form = "linear", v
       recommendation <- "Either"
       confidence <- "Medium"
       reason <- sprintf(
-        "At n=%d with high correlation (%.2f), MNP may perform slightly better if it converges (%.0f%% probability). However, MNL is still competitive.",
+        "At n=%.0f with high correlation (%.2f), MNP may perform slightly better if it converges (%.0f%% probability). However, MNL is still competitive.",
         n, correlation, mnp_convergence * 100
       )
     } else {
       recommendation <- "MNL"
       confidence <- "Medium"
       reason <- sprintf(
-        "At n=%d, both models are viable (MNP converges %.0f%%), but MNL still wins %.0f%% of comparisons and is simpler.",
+        "At n=%.0f, both models are viable (MNP converges %.0f%%), but MNL still wins %.0f%% of comparisons and is simpler.",
         n, mnp_convergence * 100, mnl_win_rate * 100
       )
     }
@@ -127,14 +127,14 @@ recommend_model <- function(n, correlation = NULL, functional_form = "linear", v
       recommendation <- "MNP"
       confidence <- "Medium"
       reason <- sprintf(
-        "At n=%d with high correlation (%.2f), MNP converges reliably (%.0f%%) and may capture error correlation better than MNL.",
+        "At n=%.0f with high correlation (%.2f), MNP converges reliably (%.0f%%) and may capture error correlation better than MNL.",
         n, correlation, mnp_convergence * 100
       )
     } else {
       recommendation <- "Either"
       confidence <- "Medium"
       reason <- sprintf(
-        "At n=%d, both models perform similarly. MNP converges %.0f%% of the time. Choose based on computational resources and theoretical considerations.",
+        "At n=%.0f, both models perform similarly. MNP converges %.0f%% of the time. Choose based on computational resources and theoretical considerations.",
         n, mnp_convergence * 100
       )
     }
