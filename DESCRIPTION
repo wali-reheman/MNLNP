@@ -1,0 +1,33 @@
+Package: mnlChoice
+Type: Package
+Title: Evidence-Based Model Selection for Multinomial Choice Models
+Version: 0.1.0
+Authors@R: c(
+    person("Your", "Name", email = "your.email@example.com", role = c("aut", "cre"))
+    )
+Description: Provides evidence-based guidance for choosing between Multinomial
+    Logit (MNL) and Multinomial Probit (MNP) models based on systematic Monte Carlo
+    simulations. Includes decision support functions, empirical benchmark data on
+    convergence rates and prediction performance, and robust wrappers for MNP
+    estimation that handle common convergence failures.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 4.0.0)
+Imports:
+    stats,
+    utils,
+    graphics,
+    grDevices
+Suggests:
+    MNP,
+    mlogit,
+    nnet,
+    mvtnorm,
+    coda,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.0.0

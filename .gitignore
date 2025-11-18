@@ -1,0 +1,37 @@
+# R package build artifacts
+*.Rcheck/
+*.tar.gz
+*.zip
+
+# R session data
+.RData
+.Rhistory
+.Rapp.history
+
+# RStudio files
+.Rproj.user/
+*.Rproj
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# MacOS
+.DS_Store
+
+# Data files (will add when ready)
+data/*.rda
+data/*.RData
+
+# Temporary files
+*.log
+*.tmp
+tmp/
+
+# Build directories
+src/*.o
+src/*.so
+src/*.dll
